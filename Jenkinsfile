@@ -82,6 +82,14 @@ pipeline {
       }
     }
 
+    stage('Remove Old Floating IP Assignment') {
+      steps {
+        // This forcibly deletes assign_external before we reassign
+        sh "terraform destroy -target=digitalocean_floating_ip_assignment.assign_external -auto-approve"
+      }
+    }
+
+
     stage('Reassign Floating IP') {
       steps {
         sh """
