@@ -7,6 +7,9 @@ pipeline {
     TF_VAR_AWS_ACCESS_KEY_ID     = credentials('do_spaces_key')
     TF_VAR_AWS_SECRET_ACCESS_KEY = credentials('do_spaces_secret')
     TF_VAR_ssh_key_id = credentials("ssh_key_id")
+    AWS_ACCESS_KEY_ID     = credentials('do_spaces_key')
+    AWS_SECRET_ACCESS_KEY = credentials('do_spaces_secret')
+
 
   }
 
