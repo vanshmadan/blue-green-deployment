@@ -75,7 +75,7 @@ pipeline {
             retry(90) {
               sleep 60
               echo "Checking /health on ${newIp}..."
-              sh "curl -sf http://${newIp}/health || exit 1"
+              sh "curl -sf http://${newIp}:8080/health || exit 1"
             }
           }
         }
