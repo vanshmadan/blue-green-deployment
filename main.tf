@@ -50,9 +50,7 @@ provider "digitalocean" {
 resource "digitalocean_floating_ip_assignment" "ip_assignment" {
   count = var.use_var_for_droplet_id || (try(data.external.active_droplet.result["active_droplet_id"], "") != "") ? 1 : 0
 
-  droplet_id = var.use_var_for_droplet_id
-    ? var.active_droplet_id
-    : tonumber(data.external.active_droplet.result["active_droplet_id"])
+  droplet_id = var.use_var_for_droplet_id ? var.active_droplet_id : tonumber(data.external.active_droplet.result["active_droplet_id"])
 
   ip_address = digitalocean_floating_ip.app_ip.id
 }
