@@ -52,6 +52,6 @@ resource "digitalocean_floating_ip_assignment" "ip_assignment" {
 
   droplet_id = var.use_var_for_droplet_id ? var.active_droplet_id : tonumber(data.external.active_droplet.result["active_droplet_id"])
 
-  ip_address = digitalocean_floating_ip.app_ip.ip
+  ip_address = digitalocean_floating_ip.app_ip.id
 }
 
