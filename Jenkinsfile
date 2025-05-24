@@ -103,7 +103,7 @@ pipeline {
         script {
           def floatingIp = sh(script: "terraform output -raw floating_ip", returnStdout: true).trim()
           echo "Verifying /health at ${floatingIp}"
-          sh "curl -sf http://${floatingIp}/health"
+          sh "curl -sf http://${floatingIp}:8080/health"
         }
       }
     }
