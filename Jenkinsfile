@@ -29,6 +29,15 @@ pipeline {
       }
     }
 
+    
+    stage('Terraform Apply Infra') {
+      steps {
+        sh """
+          terraform apply -auto-approve
+        """
+      }
+    }
+
   stage('Detect Active Droplet') {
       steps {
         script {
@@ -63,14 +72,6 @@ pipeline {
       }
     }
 
-    stage('Terraform Apply Infra') {
-      steps {
-        sh """
-          terraform apply -auto-approve \
-            -var='active_droplet_id=${env.ACTIVE_DROPLET_ID}'
-        """
-      }
-    }
 
     stage('Health Check on New Droplet') {
       steps {
