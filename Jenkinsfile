@@ -101,13 +101,14 @@ pipeline {
       }
     }
 
-    stage('Verify Final Health') {
-      steps {
-        def floatingIp = sh(script: "terraform output -raw floating_ip", returnStdout: true).trim()
-        sh "curl -sf http://${floatingIp}:8080/health"
-      }
+   stage('Verify Final Health') {
+  steps {
+    script {
+      def floatingIp = sh(script: "terraform output -raw floating_ip", returnStdout: true).trim()
+      sh "curl -sf http://${floatingIp}:8080/health"
     }
   }
+}
 
   post {
     failure {
