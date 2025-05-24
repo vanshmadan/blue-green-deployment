@@ -19,6 +19,12 @@ pipeline {
       }
     }
 
+    stage('Apply Infra (Create/Refresh)') {
+      steps {
+        sh 'terraform apply -auto-approve'
+      }
+    }
+
     stage('Get Active Droplet ID') {
       steps {
         script {
@@ -32,11 +38,6 @@ pipeline {
       }
     }
 
-    stage('Apply Infra') {
-      steps {
-        sh 'terraform apply -auto-approve'
-      }
-    }
 
     stage('Wait for /health') {
       steps {
