@@ -1,5 +1,5 @@
 #!/bin/bash
-set -e
+set -ex 
 
 FLOATING_IP="$1"
 BLUE_ID="$2"
