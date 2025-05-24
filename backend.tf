@@ -1,7 +1,7 @@
 terraform {
   backend "s3" {
     bucket         = "terraform-state-assign"
-    key            = "infra/terraform.tfstate"
+    key            = "infra/dev/terraform.tfstate"
     region         = "us-east-1" 
     endpoints = {
       s3 = "https://nyc3.digitaloceanspaces.com"
