@@ -9,7 +9,7 @@ variable "ssh_key_id" {
  }
 
 
-variable "active_droplet_id" {
-  description = "Droplet ID to which Floating IP will be assigned"
-  type = number
- }
+#variable "active_droplet_id" {
+#  description = "Droplet ID to which Floating IP will be assigned"
+#  type = number
+# }
