@@ -19,15 +19,6 @@ pipeline {
       }
     }
 
-    stage('Terraform Output IDs') {
-      steps {
-        script {
-          env.FLOATING_IP = sh(script: "terraform output -raw floating_ip", returnStdout: true).trim()
-          env.BLUE_ID     = sh(script: "terraform output -raw blue_id", returnStdout: true).trim()
-          env.GREEN_ID    = sh(script: "terraform output -raw green_id", returnStdout: true).trim()
-        }
-      }
-    }
 
     
     stage('Terraform Apply Infra') {
@@ -36,6 +27,17 @@ pipeline {
         terraform apply -target=digitalocean_droplet.blue -target=digitalocean_droplet.green -target=digitalocean_floating_ip.app_ip -auto-approve
 
         """
+      }
+    }
+
+    
+    stage('Terraform Output IDs') {
+      steps {
+        script {
+          env.FLOATING_IP = sh(script: "terraform output -raw floating_ip", returnStdout: true).trim()
+          env.BLUE_ID     = sh(script: "terraform output -raw blue_id", returnStdout: true).trim()
+          env.GREEN_ID    = sh(script: "terraform output -raw green_id", returnStdout: true).trim()
+        }
       }
     }
 
