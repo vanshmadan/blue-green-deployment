@@ -31,32 +31,41 @@ pipeline {
       }
     }
 
-    stage('Identify Active and New Droplets') {
-      steps {
-        script {
-          def floatingIp = sh(script: "terraform output -raw floating_ip", returnStdout: true).trim()
-          def blueIp = sh(script: "terraform output -raw blue_ip", returnStdout: true).trim()
-          def greenIp = sh(script: "terraform output -raw green_ip", returnStdout: true).trim()
-          def blueId = sh(script: "terraform output -raw blue_id", returnStdout: true).trim()
-          def greenId = sh(script: "terraform output -raw green_id", returnStdout: true).trim()
+  stage('Determine Active Droplet via API') {
+  steps {
+    script {
+      def floatingIp = sh(script: "terraform output -raw floating_ip", returnStdout: true).trim()
+      def blueId     = sh(script: "terraform output -raw blue_id", returnStdout: true).trim()
+      def greenId    = sh(script: "terraform output -raw green_id", returnStdout: true).trim()
 
-          if (floatingIp == blueIp) {
-            env.ACTIVE_DROPLET = "blue"
-            env.ACTIVE_ID = blueId
-            env.NEW_DROPLET = "green"
-            env.NEW_ID = greenId
-          } else {
-            env.ACTIVE_DROPLET = "green"
-            env.ACTIVE_ID = greenId
-            env.NEW_DROPLET = "blue"
-            env.NEW_ID = blueId
-          }
+      def dropletId = sh(
+        script: """
+          curl -s -H "Authorization: Bearer $DO_API_TOKEN" \\
+          https://api.digitalocean.com/v2/floating_ips/${floatingIp} | \\
+          jq -r '.floating_ip.droplet.id'
+        """,
+        returnStdout: true
+      ).trim()
 
-          echo "Floating IP is currently on ${env.ACTIVE_DROPLET} (ID: ${env.ACTIVE_ID})"
-          echo "Preparing deployment to ${env.NEW_DROPLET} (ID: ${env.NEW_ID})"
-        }
+      if (dropletId == blueId) {
+        env.ACTIVE_DROPLET = "blue"
+        env.ACTIVE_ID = blueId
+        env.NEW_DROPLET = "green"
+        env.NEW_ID = greenId
+      } else if (dropletId == greenId) {
+        env.ACTIVE_DROPLET = "green"
+        env.ACTIVE_ID = greenId
+        env.NEW_DROPLET = "blue"
+        env.NEW_ID = blueId
+      } else {
+        error("Floating IP is not assigned to blue or green droplet. ID: ${dropletId}")
       }
+
+      echo "✅ Floating IP is currently assigned to: ${env.ACTIVE_DROPLET} (${env.ACTIVE_ID})"
     }
+  }
+}
+
 
     stage('Wait for New Droplet to be Healthy') {
       steps {
