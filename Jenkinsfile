@@ -46,7 +46,7 @@ pipeline {
         script {
           withEnv(["DO_API_TOKEN=${DO_API_TOKEN}"]) {
             def status = sh(
-              script: "bash -c 'set -e; ./scripts/fetch_active_droplet.sh ${env.FLOATING_IP} ${env.BLUE_ID} ${env.GREEN_ID} > droplet_result.json'",
+              script: "bash -c 'set -e; chmod +x ./scripts/detect_active_droplet.sh && ./scripts/fetch_active_droplet.sh ${env.FLOATING_IP} ${env.BLUE_ID} ${env.GREEN_ID} > droplet_result.json'",
               returnStatus: true
             )
 
