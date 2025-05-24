@@ -33,7 +33,7 @@ pipeline {
     stage('Terraform Apply Infra') {
       steps {
         sh """
-          sh "terraform apply -target=digitalocean_droplet.blue -target=digitalocean_droplet.green -target=digitalocean_floating_ip.app_ip -auto-approve"
+        terraform apply -target=digitalocean_droplet.blue -target=digitalocean_droplet.green -target=digitalocean_floating_ip.app_ip -auto-approve
 
         """
       }
