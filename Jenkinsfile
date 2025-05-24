@@ -109,11 +109,12 @@ pipeline {
     }
   }
 }
+  }
 
   post {
     failure {
       echo "❌ Deployment failed. Check logs and retry."
     }
   }
-}
+
 }
