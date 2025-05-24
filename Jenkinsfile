@@ -34,7 +34,7 @@ pipeline {
         script {
           def result = sh(
             script: """
-              DO_API_TOKEN=${DO_API_TOKEN} bash ./scripts/detect_active_droplet.sh \
+              DO_API_TOKEN=${DO_API_TOKEN} bash /var/lib/jenkins/workspace/blue-green-deployment/scripts/detect_active_droplet.sh \
                 ${env.FLOATING_IP} ${env.BLUE_ID} ${env.GREEN_ID}
             """,
             returnStdout: true
