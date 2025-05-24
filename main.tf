@@ -48,8 +48,9 @@ provider "digitalocean" {
  ################# FLoating Ip #########################
 
 resource "digitalocean_floating_ip_assignment" "assign" {
-  droplet_id = var.active_droplet_id
-  ip_address = digitalocean_floating_ip.app_ip.id
+  count       = var.active_droplet_id > 0 ? 1 : 0
+  droplet_id  = var.active_droplet_id
+  ip_address  = digitalocean_floating_ip.app_ip.id
 
   lifecycle {
     create_before_destroy = true
