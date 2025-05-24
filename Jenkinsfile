@@ -42,38 +42,41 @@ pipeline {
     }
 
  stage('Detect Active Droplet') {
-  steps {
-    script {
-      withEnv(["DO_API_TOKEN=${DO_API_TOKEN}"]) {
-        def status = sh(
-          script: \"\"\"\n            bash -c 'set -e; ./scripts/detect_active_droplet.sh ${env.FLOATING_IP} ${env.BLUE_ID} ${env.GREEN_ID} > droplet_result.json'\n          \"\"\",\n          returnStatus: true\n        )
+      steps {
+        script {
+          withEnv(["DO_API_TOKEN=${DO_API_TOKEN}"]) {
+            def status = sh(
+              script: "bash -c 'set -e; ./scripts/detect_active_droplet.sh ${env.FLOATING_IP} ${env.BLUE_ID} ${env.GREEN_ID} > droplet_result.json'",
+              returnStatus: true
+            )
 
-        if (status != 0) {
-          echo \"❌ detect_active_droplet.sh failed with code ${status}\"
-          error(\"Stopping pipeline due to detection failure.\")
+            if (status != 0) {
+              echo "❌ detect_active_droplet.sh failed with code ${status}"
+              error("Stopping pipeline due to detection failure.")
+            }
+
+            def result = readFile('droplet_result.json').trim()
+            echo "Detect script output: ${result}"
+            def json = readJSON text: result
+
+            env.ACTIVE_DROPLET_ID = json.active_droplet_id
+
+            if (env.ACTIVE_DROPLET_ID == env.BLUE_ID) {
+              env.ACTIVE_DROPLET = "blue"
+              env.NEW_DROPLET = "green"
+              env.NEW_DROPLET_ID = env.GREEN_ID
+            } else {
+              env.ACTIVE_DROPLET = "green"
+              env.NEW_DROPLET = "blue"
+              env.NEW_DROPLET_ID = env.BLUE_ID
+            }
+
+            echo "✅ Floating IP currently on ${env.ACTIVE_DROPLET} (${env.ACTIVE_DROPLET_ID})"
+          }
         }
-
-        def result = readFile('droplet_result.json').trim()
-        echo \"Detect script output: ${result}\"
-        def json = readJSON text: result
-
-        env.ACTIVE_DROPLET_ID = json.active_droplet_id
-
-        if (env.ACTIVE_DROPLET_ID == env.BLUE_ID) {
-          env.ACTIVE_DROPLET = \"blue\"
-          env.NEW_DROPLET = \"green\"
-          env.NEW_DROPLET_ID = env.GREEN_ID
-        } else {
-          env.ACTIVE_DROPLET = \"green\"
-          env.NEW_DROPLET = \"blue\"
-          env.NEW_DROPLET_ID = env.BLUE_ID
-        }
-
-        echo \"✅ Floating IP currently on ${env.ACTIVE_DROPLET} (${env.ACTIVE_DROPLET_ID})\"
       }
     }
-  }
-}
+
 
 
 
