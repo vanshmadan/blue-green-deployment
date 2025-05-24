@@ -93,7 +93,7 @@ pipeline {
     stage('Reassign Floating IP') {
       steps {
         sh """
-          terraform apply -auto-approve -var="active_droplet_id=${env.NEW_ID}"
+          terraform apply -auto-approve  -var="use_var_for_droplet_id=true"  -var="active_droplet_id=${env.NEW_ID}"
         """
       }
     }
