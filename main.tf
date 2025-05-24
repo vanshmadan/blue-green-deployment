@@ -51,12 +51,12 @@ provider "digitalocean" {
 resource "digitalocean_floating_ip_assignment" "assign_external" {
   count       = var.use_var_for_droplet_id ? 0 : 1
   droplet_id  = tonumber(data.external.active_droplet.result["active_droplet_id"])
-  ip_address  = digitalocean_floating_ip.app_ip.ip
+  ip_address  = digitalocean_floating_ip.app_ip.id
 }
 
 # Used during IP reassignment from Jenkins
 resource "digitalocean_floating_ip_assignment" "assign_manual" {
   count       = var.use_var_for_droplet_id ? 1 : 0
   droplet_id  = var.active_droplet_id
-  ip_address  = digitalocean_floating_ip.app_ip.ip
+  ip_address  = digitalocean_floating_ip.app_ip.id
 }
