@@ -29,31 +29,36 @@ pipeline {
       }
     }
 
-    stage('Detect Active Droplet') {
+  stage('Detect Active Droplet') {
       steps {
         script {
-          def result = sh(
-            script: """
-              DO_API_TOKEN=${DO_API_TOKEN} bash  ./scripts/fetch_active_droplet.sh ${env.FLOATING_IP} ${env.BLUE_ID} ${env.GREEN_ID},
-              returnStdout: true
-            """,
-            returnStdout: true
-          ).trim()
+          withEnv(["DO_API_TOKEN=${DO_API_TOKEN}"]) {
+            try {
+              def result = sh(
+                script: "bash ./scripts/detect_active_droplet.sh ${env.FLOATING_IP} ${env.BLUE_ID} ${env.GREEN_ID}",
+                returnStdout: true
+              ).trim()
 
-          def json = readJSON text: result
-          env.ACTIVE_DROPLET_ID = json.active_droplet_id
+              echo "Detect script output: ${result}"
+              def json = readJSON text: result
+              env.ACTIVE_DROPLET_ID = json.active_droplet_id
 
-          if (env.ACTIVE_DROPLET_ID == env.BLUE_ID) {
-            env.ACTIVE_DROPLET = "blue"
-            env.NEW_DROPLET = "green"
-            env.NEW_DROPLET_ID = env.GREEN_ID
-          } else {
-            env.ACTIVE_DROPLET = "green"
-            env.NEW_DROPLET = "blue"
-            env.NEW_DROPLET_ID = env.BLUE_ID
+              if (env.ACTIVE_DROPLET_ID == env.BLUE_ID) {
+                env.ACTIVE_DROPLET = "blue"
+                env.NEW_DROPLET = "green"
+                env.NEW_DROPLET_ID = env.GREEN_ID
+              } else {
+                env.ACTIVE_DROPLET = "green"
+                env.NEW_DROPLET = "blue"
+                env.NEW_DROPLET_ID = env.BLUE_ID
+              }
+
+              echo "✅ Floating IP currently on ${env.ACTIVE_DROPLET} (${env.ACTIVE_DROPLET_ID})"
+            } catch (Exception e) {
+              echo "❌ Failed to detect active droplet: ${e.getMessage()}"
+              error("Stopping pipeline due to detection failure.")
+            }
           }
-
-          echo "✅ Floating IP currently on ${env.ACTIVE_DROPLET} (${env.ACTIVE_DROPLET_ID})"
         }
       }
     }
