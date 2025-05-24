@@ -35,7 +35,7 @@ pipeline {
           withEnv(["DO_API_TOKEN=${DO_API_TOKEN}"]) {
             try {
               def result = sh(
-                script: "bash ./scripts/detect_active_droplet.sh ${env.FLOATING_IP} ${env.BLUE_ID} ${env.GREEN_ID}",
+                script: "bash ./scripts/fetch_active_droplet.sh ${env.FLOATING_IP} ${env.BLUE_ID} ${env.GREEN_ID}",
                 returnStdout: true
               ).trim()
 
