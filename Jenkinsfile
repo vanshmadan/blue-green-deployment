@@ -2,7 +2,7 @@ pipeline {
   agent any
 
   environment {
-     TF_VAR_do_token = credentials('do-api-token') 
+    TF_VAR_do_token = credentials('do-api-token') 
     DO_API_TOKEN = credentials('do-api-token')
     TF_VAR_AWS_ACCESS_KEY_ID     = credentials('do_spaces_key')
     TF_VAR_AWS_SECRET_ACCESS_KEY = credentials('do_spaces_secret')
@@ -16,12 +16,6 @@ pipeline {
     stage('Terraform Init') {
       steps {
         sh 'terraform init -reconfigure'
-      }
-    }
-
-      stage('Terraform Apply Infra') {
-      steps {
-        sh 'terraform apply -auto-approve'
       }
     }
 
@@ -61,6 +55,15 @@ pipeline {
 
           echo "✅ Floating IP currently on ${env.ACTIVE_DROPLET} (${env.ACTIVE_DROPLET_ID})"
         }
+      }
+    }
+
+    stage('Terraform Apply Infra') {
+      steps {
+        sh """
+          terraform apply -auto-approve \
+            -var='active_droplet_id=${env.ACTIVE_DROPLET_ID}'
+        """
       }
     }
 
