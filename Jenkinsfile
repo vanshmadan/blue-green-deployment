@@ -2,8 +2,8 @@ pipeline {
   agent any
 
   environment {
-    TF_VAR_do_token = credentials('do_token') // Jenkins credentials ID for DigitalOcean API token
-    DO_API_TOKEN = credentials('do_token')    // For external script access
+    TF_VAR_do_token = credentials('do-api-token') // Jenkins credentials ID for DigitalOcean API token
+    DO_API_TOKEN = credentials('do-api-token')    // For external script access
     AWS_ACCESS_KEY_ID  = credentials('AWS_ACCESS_KEY_ID') // Jenkins ID
    AWS_SECRET_ACCESS_KEY = credentials('AWS_SECRET_ACCESS_KEY')
   }
