@@ -17,7 +17,7 @@ It:
 - **Terraform** (with DigitalOcean provider)
 - **Jenkins** (Scripted Pipeline)
 - **DigitalOcean API**
-- `Bash` / `curl`
+- **Bash** **/** **curl**
 - **Groovy**
 
 ---
