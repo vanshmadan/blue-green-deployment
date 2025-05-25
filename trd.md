@@ -109,7 +109,7 @@ curl -sf http://<floating_ip>:8080/health
 
 ## ✅ Key Decisions
 
-- Terraform target apply in first apply with no ip assigment.
+- Terraform target apply in initial apply stage with no ip assigment.
 - JSON output from shell script is parsed directly in Groovy
 - Retry/backoff handled with retry and timeout
 - Floating IP reassignment only occurs after health check passes
