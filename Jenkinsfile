@@ -3,7 +3,7 @@ pipeline {
 
   environment {
     TF_VAR_do_token = credentials('do_api_token') 
-    DO_API_TOKEN = credentials('do-api_token')
+    DO_API_TOKEN = credentials('do_api_token')
     TF_VAR_AWS_ACCESS_KEY_ID     = credentials('do_spaces_key')
     TF_VAR_AWS_SECRET_ACCESS_KEY = credentials('do_spaces_secret')
     AWS_ACCESS_KEY_ID     = credentials('do_spaces_key')
