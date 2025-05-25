@@ -139,6 +139,11 @@ curl -sf http://<floating_ip>:8080/health
 
 ---
 
+
+## References
+
+- Read tf.md for terrform details
+
 ## 📘 Changelog
 
 - **v1.0**: Initial version with fallback detection logic
