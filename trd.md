@@ -62,7 +62,15 @@ Uses the IP of the new (inactive) droplet:
 curl -sf http://<new_ip>:8080/health
 ```
 
-- Retries 10x with 30s delay (max 10 minutes timeout)
+```bash
+
+| Param     | Value    | Meaning                        |
+| --------- | -------- | ------------------------------ |
+| `timeout` | 90 min   | Maximum time to wait overall   |
+| `retry`   | 90 times | Up to 90 health check attempts |
+| `sleep`   | 60 sec   | Wait between each check        |
+
+```
 
 ### 6. Reassign Floating IP to New Droplet
 
