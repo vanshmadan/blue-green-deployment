@@ -68,7 +68,7 @@ curl -sf http://<new_ip>:8080/health
 | --------- | -------- | ------------------------------ |
 | `timeout` | 90 min   | Maximum time to wait overall   |
 | `retry`   | 90 times | Up to 90 health check attempts |
-| `sleep`   | 60 sec   | Wait between each check        |
+| `sleep`   | 30 sec   | Wait between each check        |
 
 ```
 
