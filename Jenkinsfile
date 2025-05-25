@@ -86,7 +86,7 @@ pipeline {
           def newIp = sh(script: "terraform output -raw ${env.NEW_DROPLET}_ip", returnStdout: true).trim()
           timeout(time: 90, unit: 'MINUTES') {
           retry(90) {
-            sleep 60
+            sleep 30
             echo "🌐 Checking /health on ${newIp}..."
             sh "curl -sf http://${newIp}:8080/health || exit 1"
           }
