@@ -110,7 +110,6 @@ curl -sf http://<floating_ip>:8080/health
 ## ⚠️ Known Limitations
 
 - If both droplets are down/unreachable, deployment fails.
-- Script must have execute permission (`chmod +x`).
 - Jenkins agent must support Unix-like shell.
 
 ---
